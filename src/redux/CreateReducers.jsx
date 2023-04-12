@@ -122,21 +122,7 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				deleteAllCount: state.deleteAllCount + 1,
 			};
 		})
-		// .addMatcher(
-		// 	({ type }) => type === ADD_TODO.fulfilled,
-		// 	(state, { payload }) => {
-		// 		let ui = {
-		// 			id: nanoid(),
-		// 			td: payload.t,
-		// 			check: false,
-		// 			subtodo: [],
-		// 			date: payload.date,
-		// 		};
-		// 		console.log(payload.t);
-		// 		void (state.todo = [...state.todo, ui]);
-		// 		state.addCount++;
-		// 	},
-		// );
+		
 });
 
 export default modifyReducer;
