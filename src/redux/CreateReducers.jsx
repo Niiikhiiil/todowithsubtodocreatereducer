@@ -42,6 +42,7 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				...state,
 				todo: state.todo.filter((g) => g.id !== payload.id),
 				deleteCount: state.deleteCount + 1,
+				searchTodo: state.todo.filter((q) => q.id !== payload.id),
 			};
 		})
 		.addCase(EDIT_TODO, (state, { payload }) => {
@@ -49,6 +50,12 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				...state,
 				editCount: state.editCount++,
 				todo: state.todo.map((e) => {
+					if (e.id === payload.id) {
+						e.td = payload.t;
+						e.date = payload.date;
+					}
+				}),
+				searchTodo: state.searchTodo.map((e) => {
 					if (e.id === payload.id) {
 						e.td = payload.t;
 						e.date = payload.date;
@@ -63,6 +70,11 @@ const modifyReducer = createReducer(initialState, (builder) => {
 						e.check = payload.check;
 					}
 				}),
+				searchTodo: state.searchTodo.map((e) => {
+					if (e.id === payload.id) {
+						e.check = payload.check;
+					}
+				}),
 			};
 		})
 		.addCase(ADD_TODO_SUB, (state, { payload }) => {
@@ -73,13 +85,29 @@ const modifyReducer = createReducer(initialState, (builder) => {
 			};
 			void {
 				...state,
-				todo: state.todo[Number(payload.i)].subtodo.push(sub),
+				todo: state.todo.map((st) => {
+					if (st.id === payload.id) {
+						st.subtodo.push(sub);
+					}
+				}),
+				searchTodo: state.searchTodo.map((st) => {
+					if (st.id === payload.id) {
+						st.subtodo.push(sub);
+					}
+				}),
 			};
 		})
 		.addCase(DELETE_SUB, (state, { payload }) => {
 			void {
 				...state,
 				todo: state.todo.map((g) => {
+					if (g.id === payload.id) {
+						g.subtodo = g.subtodo.filter(
+							(s) => s.sid !== payload.sid,
+						);
+					}
+				}),
+				searchTodo: state.searchTodo.map((g) => {
 					if (g.id === payload.id) {
 						g.subtodo = g.subtodo.filter(
 							(s) => s.sid !== payload.sid,
@@ -133,11 +161,9 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				searchTodo: [...searchList],
 			};
 		})
-		.addCase(RESET,(state)=>{
-			return {...state,
-			searchTodo:[]
-			}
-		})
+		.addCase(RESET, (state) => {
+			return { ...state, searchTodo: [] };
+		});
 });
 
 export default modifyReducer;

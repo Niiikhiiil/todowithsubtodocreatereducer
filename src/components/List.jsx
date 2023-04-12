@@ -17,10 +17,10 @@ const List = ({ setInput, setEdit, setId, edit, setDate }) => {
 		});
 	};
 
-	const handleSubCheckBox = (sid, check, index) => {
+	const handleSubCheckBox = (id,sid, check, index) => {
 		dispatch({
 			type: 'CHECKBOX_CHANGE_SUB',
-			payload: { sid: sid, check: !check, i: index },
+			payload: { id:id,sid: sid, check: !check, i: index },
 		});
 	};
 
@@ -90,7 +90,7 @@ const List = ({ setInput, setEdit, setId, edit, setDate }) => {
 													<input
 														type="checkbox"
 														onChange={() =>
-															handleSubCheckBox(
+															handleSubCheckBox(t.id,
 																sb.sid,
 																sb.check,
 																i,
@@ -121,6 +121,7 @@ const List = ({ setInput, setEdit, setId, edit, setDate }) => {
 
 												<div>
 													<SubEdit
+													id={t.id}
 														sid={sb.sid}
 														i={i}
 														subtd={sb.subtd}

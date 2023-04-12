@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import List from './List';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,6 +12,7 @@ const Home = () => {
 	const [search, setSearch] = useState('');
 	const [show, setShow] = useState(false);
 	const dispatch = useDispatch();
+	const { searchTodo } = useSelector((state) => state.todo);
 
 	const handleSearch = () => {
 		dispatch({ type: 'SEARCH', payload: { search: search } });
@@ -24,6 +25,7 @@ const Home = () => {
 		setSearch('');
 		setShow(!show);
 	};
+
 
 	return (
 		<>
@@ -100,7 +102,7 @@ const Home = () => {
 			<div className="searchDiv">
 				<input
 					type="text"
-					value={search}	
+					value={search}
 					className="searchInput"
 					onChange={(e) => setSearch(e.target.value)}
 				/>
@@ -111,7 +113,7 @@ const Home = () => {
 					{' '}
 					Search
 				</button>
-				{show && (
+				{searchTodo.length > 0 && show && (
 					<button
 						className="reset"
 						onClick={() => handleReset()}

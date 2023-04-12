@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-const SubEdit = ({ sid, i, subtd }) => {
+const SubEdit = ({ id,sid, i, subtd }) => {
 	const [subInput, setSubInput] = useState('');
 	const [subEdit, setSubEdit] = useState(false);
 	const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const SubEdit = ({ sid, i, subtd }) => {
 					dispatch({
 						type: 'EDIT_SUB',
 						payload: {
+							id:id,
 							subtd: subInput,
 							i: i,
 							sid: sid,
