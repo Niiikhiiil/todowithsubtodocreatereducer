@@ -20,11 +20,29 @@ code {
 	justify-content: center;
 	font-size: 1rem;
 }
+.searchDiv{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	font-size: 1rem;
+}
 .mainInput {
 	margin: 5px;
 	border: none;
 	color: white;
 	background-color: black;
+	border-radius: 10px;
+	padding: 12px;
+	font-size: 1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.searchInput{
+	margin: 5px;
+	border: none;
+	color: rgb(51, 40, 40);
+	background-color: rgb(226, 209, 209);
 	border-radius: 10px;
 	padding: 12px;
 	font-size: 1rem;
@@ -76,6 +94,24 @@ code {
 	cursor: pointer;
 	text-transform: uppercase;
 }
+.search{
+	color: white;
+	background-color: rgb(144, 144, 238);
+	padding: 12px;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	text-transform: uppercase;
+}
+.reset{
+	color: white;
+	background-color: rgb(104, 89, 6);
+	padding: 12px;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	text-transform: uppercase;
+}
 .addsub {
 	color: white;
 	background-color: rgb(91, 91, 235);
@@ -114,7 +150,7 @@ code {
 }
 
 .listmain {
-	margin-left: 16%;
+	margin-left: 25%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

@@ -10,7 +10,8 @@ const ADD_TODO_SUB = createAction('ADD_TODO_SUB');
 const DELETE_SUB = createAction('DELETE_SUB');
 const EDIT_SUB = createAction('EDIT_SUB');
 const CHECKBOX_CHANGE_SUB = createAction('CHECKBOX_CHANGE_SUB');
-
+const SEARCH = createAction('SEARCH');
+const RESET = createAction('RESET');
 
 const initialState = {
 	todo: [],
@@ -19,8 +20,8 @@ const initialState = {
 	deleteCount: 0,
 	deleteAllCount: 0,
 	selectedDeleteCount: 0,
+	searchTodo: [],
 };
-
 
 const modifyReducer = createReducer(initialState, (builder) => {
 	builder
@@ -30,7 +31,7 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				td: payload.t,
 				check: false,
 				subtodo: [],
-		        date:payload.date
+				date: payload.date,
 			};
 			console.log(payload.t);
 			void (state.todo = [...state.todo, ui]);
@@ -122,7 +123,21 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				deleteAllCount: state.deleteAllCount + 1,
 			};
 		})
-		
+		.addCase(SEARCH, (state, { payload }) => {
+			let searchList = state.todo.filter((r) => {
+				return r.td.includes(payload.search.toLowerCase());
+			});
+			console.log({ searchList });
+			return {
+				...state,
+				searchTodo: [...searchList],
+			};
+		})
+		.addCase(RESET,(state)=>{
+			return {...state,
+			searchTodo:[]
+			}
+		})
 });
 
 export default modifyReducer;

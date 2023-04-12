@@ -9,7 +9,21 @@ const Home = () => {
 	const [edit, setEdit] = useState(false);
 	const [error, setError] = useState('');
 	const [id, setId] = useState('');
+	const [search, setSearch] = useState('');
+	const [show, setShow] = useState(false);
 	const dispatch = useDispatch();
+
+	const handleSearch = () => {
+		dispatch({ type: 'SEARCH', payload: { search: search } });
+		setSearch('');
+		setShow(!show);
+	};
+
+	const handleReset = () => {
+		dispatch({ type: 'RESET' });
+		setSearch('');
+		setShow(!show);
+	};
 
 	return (
 		<>
@@ -20,9 +34,7 @@ const Home = () => {
 				<div>
 					<h3>TODO-SUBTODO</h3>
 				</div>
-				<div>
-					
-				</div>
+				<div></div>
 				<div>
 					<input
 						className="mainInput"
@@ -37,12 +49,12 @@ const Home = () => {
 						value={date}
 						onChange={(e) => setDate(e.target.value)}
 					/>
-					
+
 					{edit ? (
 						<button
 							className="edit"
 							onClick={() => {
-								if (input !== '' ) {
+								if (input !== '') {
 									dispatch({
 										type: 'EDIT_TODO',
 										payload: {
@@ -66,7 +78,7 @@ const Home = () => {
 						<button
 							className="add"
 							onClick={() => {
-								if (input !== ''&& date!=='') {
+								if (input !== '' && date !== '') {
 									dispatch({
 										type: 'ADD_TODO',
 										payload: { t: input, date: date },
@@ -84,6 +96,30 @@ const Home = () => {
 					)}
 					{error}
 				</div>
+			</div>
+			<div className="searchDiv">
+				<input
+					type="text"
+					value={search}	
+					className="searchInput"
+					onChange={(e) => setSearch(e.target.value)}
+				/>
+				<button
+					className="search"
+					onClick={() => handleSearch()}
+				>
+					{' '}
+					Search
+				</button>
+				{show && (
+					<button
+						className="reset"
+						onClick={() => handleReset()}
+					>
+						{' '}
+						home
+					</button>
+				)}
 			</div>
 			<div className="filterButtonDiv">
 				{todo.some((t) => t.check === true) && (
@@ -103,7 +139,7 @@ const Home = () => {
 					</button>
 				)}
 			</div>
-			<div className={todo.length > 0 && 'listmain'}>
+			<div className={todo.length > 0 ? 'listmain' : ''}>
 				<List
 					setEdit={setEdit}
 					setInput={setInput}
