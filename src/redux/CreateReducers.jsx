@@ -12,6 +12,10 @@ const EDIT_SUB = createAction('EDIT_SUB');
 const CHECKBOX_CHANGE_SUB = createAction('CHECKBOX_CHANGE_SUB');
 const SEARCH = createAction('SEARCH');
 const RESET = createAction('RESET');
+const NOTFOUND = createAction('NOTFOUND');
+const CHANGE_SELECT = createAction('CHANGE_SELECT');
+const CHANGE_SELECT_SUB = createAction('CHANGE_SELECT_SUB');
+const FILTER_BY_DATE = createAction('FILTER_BY_DATE');
 
 const initialState = {
 	todo: [],
@@ -21,17 +25,21 @@ const initialState = {
 	deleteAllCount: 0,
 	selectedDeleteCount: 0,
 	searchTodo: [],
+	notFound: '',
+	filterByArrayTodo: [],
 };
 
 const modifyReducer = createReducer(initialState, (builder) => {
 	builder
 		.addCase(ADD_TODO, (state, { payload }) => {
+			console.log(payload.select);
 			let ui = {
 				id: nanoid(),
 				td: payload.t,
 				check: false,
 				subtodo: [],
 				date: payload.date,
+				select: payload.select,
 			};
 			console.log(payload.t);
 			void (state.todo = [...state.todo, ui]);
@@ -82,6 +90,7 @@ const modifyReducer = createReducer(initialState, (builder) => {
 				sid: nanoid(),
 				subtd: payload.subtd,
 				check: false,
+				select: '',
 			};
 			void {
 				...state,
@@ -120,9 +129,22 @@ const modifyReducer = createReducer(initialState, (builder) => {
 		.addCase(CHECKBOX_CHANGE_SUB, (state, { payload }) => {
 			void {
 				...state,
-				todo: state.todo[Number(payload.i)].subtodo?.map((s) => {
-					if (s.sid === payload.sid) {
-						s.check = payload.check;
+				todo: state.todo.map((s) => {
+					if (s.id === payload.id) {
+						return s.subtodo.map((q) => {
+							if (q.sid === payload.sid) {
+								return (q.check = payload.check);
+							}
+						});
+					}
+				}),
+				searchTodo: state.searchTodo.map((d) => {
+					if (d.id === payload.id) {
+						return d.subtodo.map((q) => {
+							if (q.sid === payload.sid) {
+								return (q.check = payload.check);
+							}
+						});
 					}
 				}),
 			};
@@ -131,6 +153,7 @@ const modifyReducer = createReducer(initialState, (builder) => {
 			return {
 				...state,
 				todo: state.todo.filter((g) => g.check !== true),
+				searchTodo: state.searchTodo.filter((g) => g.check !== true),
 				selectedDeleteCount: state.selectedDeleteCount + 1,
 			};
 		})
@@ -155,14 +178,82 @@ const modifyReducer = createReducer(initialState, (builder) => {
 			let searchList = state.todo.filter((r) => {
 				return r.td.includes(payload.search.toLowerCase());
 			});
-			console.log({ searchList });
-			return {
-				...state,
-				searchTodo: [...searchList],
-			};
+			if (searchList.length > 0) {
+				return {
+					...state,
+					searchTodo: [...searchList],
+				};
+			} else {
+				return {
+					...state,
+					notFound: 'Result Not Found',
+				};
+			}
 		})
 		.addCase(RESET, (state) => {
-			return { ...state, searchTodo: [] };
+			state.searchTodo = [];
+			void { ...state };
+		})
+		.addCase(NOTFOUND, (state) => {
+			state.notFound = '';
+			void { ...state };
+		})
+		.addCase(CHANGE_SELECT, (state, { payload }) => {
+			void {
+				...state,
+				todo: state.todo.map((r) => {
+					if (r.id === payload.id) {
+						r.select = payload.select;
+					}
+				}),
+				searchTodo: state.searchTodo.map((i) => {
+					if (i.id === payload.id) {
+						i.select = payload.select;
+					}
+				}),
+			};
+		})
+		.addCase(CHANGE_SELECT_SUB, (state, { payload }) => {
+			void {
+				...state,
+				todo: state.todo.map((r) => {
+					if (r.id === payload.id) {
+						return r.subtodo.map((q) => {
+							if (q.sid === payload.sid) {
+								return (q.select = payload.select);
+							}
+						});
+					}
+				}),
+				searchTodo: state.searchTodo.map((i) => {
+					if (i.id === payload.id) {
+						return i.subtodo.map((q) => {
+							if (q.sid === payload.sid) {
+								return (q.select = payload.select);
+							}
+						});
+					}
+				}),
+			};
+		})
+		.addCase(FILTER_BY_DATE, (state, { payload }) => {
+			// let u = payload.dateArray;
+			console.log(payload.startdate);
+			let sDate = new Date(payload.startdate);
+			let q = [];
+			while (sDate <= payload.enddate) {
+				state.todo.map((f) => {
+					if (f.date == sDate) {
+						return (q = [...q, f]);
+					}
+				});
+				sDate.setTime(sDate.getTime() + 24 * 60 * 60 * 1000);
+			}
+			console.log(q);
+			void {
+				...state,
+				// filterByArrayTodo: state.filterByArrayTodo.push(q),
+			};
 		});
 });
 

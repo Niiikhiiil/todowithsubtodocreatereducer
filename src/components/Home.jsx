@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import List from './List';
 import { useDispatch, useSelector } from 'react-redux';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Home = () => {
+	const [startdate, setStartdate] = useState(new Date());
+	const [enddate, setEnddate] = useState(new Date());
+	const [selectedd, setSelected] = useState('');
 	const { todo } = useSelector((state) => state.todo);
 	const [input, setInput] = useState('');
 	const [date, setDate] = useState('');
@@ -13,9 +18,31 @@ const Home = () => {
 	const [show, setShow] = useState(false);
 	const dispatch = useDispatch();
 	const { searchTodo } = useSelector((state) => state.todo);
+	const select = ['start', 'pending', 'finish'];
+
+	const handleFilterDate = () => {
+		let sDate = startdate;
+
+		// let dateArray = [];
+		// while (sDate <= enddate) {
+		// 	dateArray.push(new Date(sDate).toString());
+		// 	sDate.setTime(sDate.getTime() + 24 * 60 * 60 * 1000);
+		// }
+		// console.log(dateArray);
+		dispatch({
+			type: 'FILTER_BY_DATE',
+			payload: {
+				startdate: startdate.toString(),
+				enddate: enddate.toString(),
+			},
+		});
+	};
 
 	const handleSearch = () => {
-		dispatch({ type: 'SEARCH', payload: { search: search } });
+		dispatch({
+			type: 'SEARCH',
+			payload: { search: search },
+		});
 		setSearch('');
 		setShow(!show);
 	};
@@ -26,7 +53,6 @@ const Home = () => {
 		setShow(!show);
 	};
 
-
 	return (
 		<>
 			<div
@@ -36,7 +62,6 @@ const Home = () => {
 				<div>
 					<h3>TODO-SUBTODO</h3>
 				</div>
-				<div></div>
 				<div>
 					<input
 						className="mainInput"
@@ -45,12 +70,34 @@ const Home = () => {
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 					/>
-					<input
-						className="date"
-						type="date"
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
+					<DatePicker
+						id="start-date"
+						selected={date}
+						startDate={date}
+						placeholderText="select Date"
+						valueDefault={null}
+						onChange={(date) => setDate(date)}
+						className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline date"
 					/>
+
+					<select
+						className="option"
+						name="select"
+						value={selectedd}
+						onChange={(e) => setSelected(e.target.value)}
+					>
+						<option>select</option>
+						{select.map((f, i) => {
+							return (
+								<option
+									key={f + i}
+									value={f}
+								>
+									{f}
+								</option>
+							);
+						})}
+					</select>
 
 					{edit ? (
 						<button
@@ -83,11 +130,16 @@ const Home = () => {
 								if (input !== '' && date !== '') {
 									dispatch({
 										type: 'ADD_TODO',
-										payload: { t: input, date: date },
+										payload: {
+											t: input,
+											date: date.toString(),
+											select: selectedd,
+										},
 									});
 									setInput('');
 									setError('');
 									setDate('');
+									setSelected('');
 								} else {
 									setError('field is empty');
 								}
@@ -123,6 +175,25 @@ const Home = () => {
 					</button>
 				)}
 			</div>
+			<div>
+				<DatePicker
+					id="start-date"
+					placeholderText="select Date"
+					selected={startdate}
+					valueDefault={null}
+					onChange={(date) => setStartdate(date)}
+					className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline date"
+				/>
+				<DatePicker
+					id="start-date"
+					placeholderText="select Date"
+					selected={enddate}
+					valueDefault={null}
+					onChange={(date) => setEnddate(date)}
+					className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline date"
+				/>
+				<button onClick={() => handleFilterDate()}>Filter</button>
+			</div>
 			<div className="filterButtonDiv">
 				{todo.some((t) => t.check === true) && (
 					<button
@@ -141,15 +212,14 @@ const Home = () => {
 					</button>
 				)}
 			</div>
-			<div className={todo.length > 0 ? 'listmain' : ''}>
-				<List
-					setEdit={setEdit}
-					setInput={setInput}
-					setId={setId}
-					edit={edit}
-					setDate={setDate}
-				/>
-			</div>
+
+			<List
+				setEdit={setEdit}
+				setInput={setInput}
+				setId={setId}
+				edit={edit}
+				setDate={setDate}
+			/>
 		</>
 	);
 };

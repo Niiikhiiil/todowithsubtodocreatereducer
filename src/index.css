@@ -20,7 +20,7 @@ code {
 	justify-content: center;
 	font-size: 1rem;
 }
-.searchDiv{
+.searchDiv {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -38,7 +38,7 @@ code {
 	font-weight: 700;
 	text-transform: uppercase;
 }
-.searchInput{
+.searchInput {
 	margin: 5px;
 	border: none;
 	color: rgb(51, 40, 40);
@@ -60,7 +60,48 @@ code {
 	font-weight: 700;
 	text-transform: uppercase;
 }
-
+.option {
+	margin: 5px;
+	border: none;
+	color: rgb(71, 17, 17);
+	background-color: rgb(194, 184, 202);
+	border-radius: 10px;
+	padding: 12px;
+	font-size: 1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.option1 {
+	border: none;
+	color: rgb(71, 17, 17);
+	background-color: rgb(194, 184, 202);
+	border-radius: 10px;
+	padding: 12px;
+	/* font-size: 1rem; */
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.option1:disabled {
+	background-color: rgb(140, 136, 143);
+	cursor: default;
+}
+.option2 {
+	border: none;
+	color: rgb(71, 17, 17);
+	background-color: rgb(194, 184, 202);
+	border-radius: 10px;
+	padding: 5px;
+	/* font-size: 1rem; */
+	font-weight: 700;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.option2:disabled {
+	background-color: rgb(140, 136, 143);
+	cursor: default;
+}
 .delete {
 	color: white;
 	background-color: red;
@@ -94,7 +135,7 @@ code {
 	cursor: pointer;
 	text-transform: uppercase;
 }
-.search{
+.search {
 	color: white;
 	background-color: rgb(144, 144, 238);
 	padding: 12px;
@@ -103,7 +144,7 @@ code {
 	cursor: pointer;
 	text-transform: uppercase;
 }
-.reset{
+.reset {
 	color: white;
 	background-color: rgb(104, 89, 6);
 	padding: 12px;
@@ -157,9 +198,11 @@ code {
 	overflow-y: auto;
 	max-width: 90vh;
 	max-height: 80vh;
-	border: 1px solid blue;
+	border: none;
 	border-radius: 10px;
 	padding: 10px;
+	background-color: rgb(88, 88, 88);
+	color: whitesmoke;
 }
 .list {
 	/* width:800px; */
@@ -214,4 +257,24 @@ code {
 	cursor: pointer;
 	text-transform: uppercase;
 	font-size: 0.7rem;
+}
+.notFound {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 10px;
+	background-color: blanchedalmond;
+	margin-bottom: 5px;
+	color: rgb(88, 88, 88);
+}
+.notFound > button {
+	color: white;
+	background-color: rgb(87, 84, 70);
+	padding: 12px;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	text-transform: uppercase;
 }
